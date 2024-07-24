@@ -25,7 +25,8 @@ namespace BarAttributeEditor
 
             if (barAttribute.IsVertical)
             {
-                barRect = new Rect(position.x, position.y + PropertyHeight + Spacing, barHeight, position.height - PropertyHeight - Spacing);
+                barRect = new Rect(position.x, position.y + PropertyHeight + Spacing, barHeight,
+                    position.height - PropertyHeight - Spacing);
             }
             else
             {
@@ -34,23 +35,36 @@ namespace BarAttributeEditor
 
             float currentValue, maxValue;
 
-            if (property.propertyType == SerializedPropertyType.Vector2)
+            switch (property.propertyType)
             {
-                Vector2 vec = property.vector2Value;
-                currentValue = vec.x;
-                maxValue = vec.y;
-            }
-            else
-            {
-                currentValue = GetPropertyValue(property);
-                if (!string.IsNullOrEmpty(barAttribute.MaxValueField))
+                case SerializedPropertyType.Vector2:
                 {
-                    var maxValueProperty = property.serializedObject.FindProperty(barAttribute.MaxValueField);
-                    maxValue = GetPropertyValue(maxValueProperty);
+                    Vector2 vec = property.vector2Value;
+                    currentValue = vec.x;
+                    maxValue = vec.y;
+                    break;
                 }
-                else
+                case SerializedPropertyType.Vector2Int:
                 {
-                    maxValue = currentValue;
+                    Vector2 vec = property.vector2IntValue;
+                    currentValue = vec.x;
+                    maxValue = vec.y;
+                    break;
+                }
+                default:
+                {
+                    currentValue = GetPropertyValue(property);
+                    if (!string.IsNullOrEmpty(barAttribute.MaxValueField))
+                    {
+                        var maxValueProperty = property.serializedObject.FindProperty(barAttribute.MaxValueField);
+                        maxValue = GetPropertyValue(maxValueProperty);
+                    }
+                    else
+                    {
+                        maxValue = currentValue;
+                    }
+
+                    break;
                 }
             }
 
@@ -58,7 +72,8 @@ namespace BarAttributeEditor
 
             string barLabel = $"{currentValue:F2}/{maxValue:F2}";
 
-            DrawEnhancedBar(barRect, fillPercentage, barLabel, GetColor(barAttribute.Color), barAttribute.BackgroundColor, barAttribute.IsVertical);
+            DrawEnhancedBar(barRect, fillPercentage, barLabel, GetColor(barAttribute.Color),
+                barAttribute.BackgroundColor, barAttribute.IsVertical);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -81,7 +96,8 @@ namespace BarAttributeEditor
             }
         }
 
-        private void DrawEnhancedBar(Rect position, float fillPercent, string label, Color barColor, Color backgroundColor, bool isVertical)
+        private void DrawEnhancedBar(Rect position, float fillPercent, string label, Color barColor,
+            Color backgroundColor, bool isVertical)
         {
             if (Event.current.type != EventType.Repaint)
                 return;
@@ -93,12 +109,14 @@ namespace BarAttributeEditor
             Rect fillRect;
             if (isVertical)
             {
-                fillRect = new Rect(position.x, position.y + position.height * (1 - fillPercent), position.width, position.height * fillPercent);
+                fillRect = new Rect(position.x, position.y + position.height * (1 - fillPercent), position.width,
+                    position.height * fillPercent);
             }
             else
             {
                 fillRect = new Rect(position.x, position.y, position.width * fillPercent, position.height);
             }
+
             EditorGUI.DrawRect(fillRect, barColor);
 
             // Draw border
