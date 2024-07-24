@@ -1,0 +1,23 @@
+{
+  "name": "com.bar.attribute",
+  "displayName": "Bar Attribute",
+  "description": "A good Bar Attribute for unity",
+  "version": "0.9.0",
+  "unity": "2021.2",
+  "category": "core",
+  "author": {
+    "name": "IAFahim",
+    "email": "iafahim.dev@gmail.com",
+    "url": "https://github.com/iafahim"
+  },
+  "license": "MIT",
+  "keywords": [
+    "unity"
+  ],
+  "dependencies": {
+  },
+  "repository": {
+  },
+  "publishConfig": {
+  }
+}
